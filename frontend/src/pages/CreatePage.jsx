@@ -1,5 +1,6 @@
-import { Box, Container, Heading, Input, Button, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Container, Heading, Input, Button, useColorModeValue, VStack, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useProductStore } from '../store/product';
 
 const CreatePage = () => {
     const [newProduct, setNewProduct] = useState({
@@ -8,14 +9,32 @@ const CreatePage = () => {
         image: "",
     });
 
-    const handleAddProduct = () => {
-        console.log(newProduct);
-    }
+    const toast = useToast()
+
+    const {createProduct} = useProductStore()
+    
+    const handleAddProduct = async () => {
+        const {success, message} = await createProduct(newProduct)
+        if(!success){
+            toast({
+                title: "Error",
+                description: message,
+                status: "error",
+                isClosable: true,
+            })
+        } else{
+            toast({
+                title: "Success",
+                description: message,
+                status: "success",
+                isClosable: true,
+            });
+        }
+        setNewProduct({name: "", price: "", image: ""});
+    };
 
     return <Container maxW={"container.sm"}>
-    <VStack
-        spacing={8}
-    >
+    <VStack spacing={8}>
         <Heading as={"h1"} size={"2x1"} textAlign={"center"} mb={8}> 
             Create New Product
         </Heading>
