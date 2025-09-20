@@ -4,7 +4,9 @@
   "description": "A mock store where you can create, edit, and delete various products",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon backend/server.js"
+    "dev": "NODE_ENV=development nodemon backend/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "NODE_ENV=production node backend/server.js"
   },
   "type": "module",
   "repository": {
@@ -19,12 +21,12 @@
   },
   "homepage": "https://github.com/Brmilee/Product-Store#readme",
   "dependencies": {
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "mongodb": "^6.19.0",
-    "mongoose": "^8.18.1"
+    "mongoose": "^8.5.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.4"
   }
 }
