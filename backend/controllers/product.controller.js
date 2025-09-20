@@ -1,4 +1,5 @@
 import Product from "../models/product.model.js";
+import mongoose from "mongoose";
 
 export const getProducts = async (req, res) =>{
     try{
@@ -29,7 +30,7 @@ export const createProduct = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({success:false, message:"Invalid Product Id"});
@@ -37,7 +38,7 @@ export const deleteProduct = async (req, res) => {
 
     try{
         await Product.findByIdAndDelete(id);
-        res.status(200).json({sucess: true, message: "Product deleted"});
+        res.status(200).json({sucess: true, message: "Product successfully deleted"});
     } catch (error){
         console.error("Error in Delete product:", error.message);
         res.status(500).json({success: false, message: "Server Error"});
@@ -45,19 +46,21 @@ export const deleteProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const product = req.body;
 
     //verify product id
     if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({success:false, message:"Invalid Product Id"});
+        return res.status(404).json({ success:false, message:"Invalid Product Id" });
     }
 
     try{
-        const updatedProduct = await Product.findByIdAndUpdate(id, product);
+        const updatedProduct = await Product.findByIdAndUpdate(id, product, {new: true});
         res.status(200).json({success: true, data: updatedProduct});
     }catch (error){
         console.log("Error updating product", error.message);
         res.status(500).json({success: false, message: "Server Error"});
+        
     }
+    
 };
